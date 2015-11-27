@@ -1,0 +1,52 @@
+{
+    "size" : [10, 10],
+    "layers": {
+        "Surfaces": [
+            ["sand4", "sand5_2", "sand4", "sand4", "sand4", "sand4", "sand5_2", "sand4", "sand5_2", "sand4"],
+            ["sand4", "sand4", "sand4", "sand4", "sand4", "sand4", "sand4", "sand5_2", "sand4", "sand4"],
+            ["sand4", "sand4", "sand5_2", "sand4", "sand4", "sand4", "sand4", "sand4", "sand4", "sand4"],
+            ["sand4", "sand5_2", "sand4", "sand4", "sand4", "sand4", "sand5_2", "sand4", "sand4", "sand4"],
+            ["sand4", "sand4", "sand4", "sand4", "sand4", "sand4", "sand4", "sand4", "sand4", "sand4"],
+            ["sand4", "sand4", "sand4", "sand4", "sand4", "sand4", "sand4", "sand4", "sand4", "sand4"],
+            ["sand4", "sand4", "sand5_2", "sand4", "sand4", "sand5_2", "sand4", "sand4", "sand4", "sand5_2"],
+            ["sand4", "sand4", "sand4", "sand4", "sand4", "sand5_2", "sand4", "sand4", "sand4", "sand4"],
+            ["sand4", "sand4", "sand5_2", "sand4", "sand5_2", "sand4", "sand4", "sand4", "sand4", "sand4"],
+            ["sand4", "sand4", "sand4", "sand4", "sand4", "sand4", "sand4", "sand4", "sand4", "sand4"]
+        ],
+        "UnitsTextures": [
+            ["sheriff", 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, "policeman"]
+        ],
+        "Units": [
+            [{
+                "Graphics":{"skin": "sheriff"},
+                "Movement":{"x": 0, "y": 0},
+                "Attributes":{"health": 100}
+                },
+                0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0,
+            {
+                "Graphics":{"skin": "policeman"},
+                "Movement":{"x": 9, "y": 9},
+                "Attributes":{"health": 100}
+                }]
+        ]
+    },
+    "layers_order": ["Surfaces", "Units", "UnitsTextures"]
+}
