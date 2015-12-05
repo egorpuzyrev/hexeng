@@ -2,8 +2,8 @@
 #-*- coding: utf-8 -*-
 
 """
-Graphics component handles loading static and animated images.
-It requires special container named 'spritecontainer' to store sprites.
+Graphics component handles load of static and animated images.
+It requires special container named 'spritecontainer' to store sprites in it.
 """
 
 import sys

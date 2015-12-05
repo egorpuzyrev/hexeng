@@ -40,6 +40,23 @@ def setup_app():
 
 
 
+def Graphics_UpdateScene_Handler(obj, event):
+    # ~if type(event) is UpdateSceneEvent:
+    layers_order = event.layers_order
+    sprites = obj.sprites_container.data[obj.id]
+    # ~for l in layers_order:
+        # ~renderer.draw_map_layer(layer=l)
+    # ~print(">>>>EVENT:", event)
+
+def Renderer_UpdateScene_Handler(obj, event):
+    # ~print("Renderer_UpdateScene_Handler")
+    # ~if type(event) is UpdateSceneEvent:
+    layers_order = event.layers_order
+    # ~sprites = graphics.sprites_container.data[graphics.id]
+    for l in layers_order:
+        obj.draw_map_layer(layer=l)
+
+
 if __name__=='__main__':
 
     setup_app() # allows to build .exe
@@ -58,10 +75,17 @@ if __name__=='__main__':
     # ~load_map_from_file(m, graphics, 'test_map.js')
 
     graphics = Graphics(engine, Container(engine))
+    graphics.bind(UpdateSceneEvent, Graphics_UpdateScene_Handler)
 
     window = sf.RenderWindow(sf.VideoMode(800, 600), 'HEX')
 
     renderer = Renderer(engine, graphics, window)
+    renderer.bind(UpdateSceneEvent, Renderer_UpdateScene_Handler)
+
+    iface = IFaceManager(engine, Container(), window)
+
+    mwid = MasterWidget(iface)
+    btn1 = Button(mwid)
 
     attributes = Attributes(engine)
 
@@ -88,6 +112,8 @@ if __name__=='__main__':
 
     cur_uid = 0
     unit = 0
+
+    total_zoom = 1
 
     circle = sf.CircleShape(R(S), 6)
     # ~circle.radius = R(S)
@@ -140,9 +166,7 @@ if __name__=='__main__':
         # ~if cur_conv:
             # ~engine.push_event(AskEvent(conversation=cur_conv))
 
-
         engine.push_event(DisplayEvent())
-
 
         x, y = sf.Mouse.get_position(window)
 
@@ -173,15 +197,18 @@ if __name__=='__main__':
 
             elif type(event) is sf.ResizeEvent:
                 window.view = sf.View((0, 0, event.size[0], event.size[1]))
-
+                window.view.zoom(total_zoom)
                 engine.push_event(ClearCanvasEvent())
                 engine.push_event(UpdateSceneEvent(layers_order=['Surfaces', 'UnitsTextures']))
                 engine.push_event(DisplayEvent())
 
             elif type(event) is sf.MouseWheelEvent:
 
-                print('ZOOM:', zoom_coeff(4, event.delta))
-                window.view.zoom(zoom_coeff(1.25, -event.delta))
+                # ~print('ZOOM:', zoom_coeff(4, event.delta))
+                print('TOTAL_ZOOM:', total_zoom)
+                zoom = zoom_coeff(1.25, -event.delta)
+                total_zoom *= zoom
+                window.view.zoom(zoom)
 
             elif type(event) is sf.MouseButtonEvent:
                 button = event.button
@@ -228,7 +255,7 @@ if __name__=='__main__':
                                 cur_y = t['hex_y'](path[i][0], path[i][1], S)
 
 
-                                renderer.animate(animation_name, prev_x, prev_y, cur_x, cur_y, step=5)
+                                renderer.animate(animation_name, prev_x, prev_y, cur_x, cur_y, step=1)
 
                             movement.move(cur_uid, int(map_x-ux), int(map_y-uy))
 
@@ -284,19 +311,19 @@ if __name__=='__main__':
 
             event = engine.poll_event()
 
-            print(">>>EVENT TYPE IS:", type(event))
+            # ~print(">>>EVENT TYPE IS:", type(event))
 
             if type(event) is UpdateSceneEvent:
 
-                layers_order = event.layers_order
-
-                sprites = graphics.sprites_container.data[graphics.id]
-
-                for l in layers_order:
-                    # ~graphics.prerender_map_layer(layer=l)
-
-                    renderer.draw_map_layer(layer=l)
-
+                # ~layers_order = event.layers_order
+                # ~sprites = graphics.sprites_container.data[graphics.id]
+                # ~for l in layers_order:
+                    # ~renderer.draw_map_layer(layer=l)
+                # ~print(">>>EVENT:", event)
+                graphics.update(event)
+                # ~print(">>>EVENT:", event)
+                renderer.update(event)
+                
             elif type(event) is ClearCanvasEvent:
 
                 if 'color' in event.__dict__:
@@ -439,7 +466,7 @@ if __name__=='__main__':
 
                     answer = ask(window, engine, message, size, answers=answers)
                     
-                    print("ANSWER:", answer)
+                    # ~print("ANSWER:", answer)
 
                     if not answer is None:
                         conv['.lastanswer'] = answer
@@ -457,7 +484,7 @@ if __name__=='__main__':
 
         delta_time = current_time - last_time
 
-        print(">>>DELAY:", TIMING-delta_time%TIMING)
+        # ~print(">>>DELAY:", TIMING-delta_time%TIMING)
 
         sf.sleep(sf.milliseconds(TIMING-delta_time%TIMING))
 

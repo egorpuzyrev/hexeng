@@ -1,6 +1,7 @@
 .fuse_*
 *.pyc
 *.pyo
-__pycache__
+**/__pycache__/
+**/__pycache__/*
 geany_run_script.sh
 geany_run_script.bat

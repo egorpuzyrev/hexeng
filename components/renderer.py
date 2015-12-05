@@ -29,7 +29,6 @@ class Renderer(Component):
         self.window = window
 
 
-
     def draw_static(self, name, x1=None, y1=None, rectangle=None, anchor=None):
         """
         name - name of sprite in db
@@ -277,14 +276,5 @@ class Renderer(Component):
                 sprite.position = (t['hex_x'](i[0], j[0], S), t['hex_y'](i[0], j[0], S))
 
                 self.window.draw(sprite)
-
-
-
-
-
-
-    def update(self):
-        pass
-
 
 

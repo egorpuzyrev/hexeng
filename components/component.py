@@ -31,6 +31,8 @@ class Component(object):
         self.containers_list = []
         self.containers = {}
 
+        self.handlers = {}
+
         # ~self.containers = engineobj.containers
         # ~self.components = engineobj.components
 
@@ -49,6 +51,17 @@ class Component(object):
         if objid in self.containers_d:
             self.containers_d.pop(objid)
 
-    def update(self):
+    def bind(self, event_type, handler, mode='+'):
 
-        pass
+        if self.handlers.get(event_type) is None:
+            self.handlers[event_type] = []
+            
+        if mode=='+':
+            self.handlers[event_type].append(handler)
+        elif mode=='-':
+            self.handlers[event_type] = [handler, ]
+            
+    def update(self, event):
+        event_type = type(event)
+        for handler in self.handlers[event_type]:
+            handler(self, event)

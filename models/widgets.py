@@ -9,7 +9,6 @@ from .container import Container
 from support.support import *
 
 
-
 class MasterWidget(Container):
 
     # ~def __init__(self, engineobj=None, selfid=None, maptype='', sizex=0, sizey=0, *layers, **components):
@@ -31,7 +30,6 @@ class Button(Widget):
         super().__init__(master)
         self.widget_type = 'Button'
         self.label = label
-
 
 class Label(Widget):
 

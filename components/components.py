@@ -22,3 +22,4 @@ from .attributes import *
 from .action import *
 from .conversation import *
 from .ai import *
+from .interface import *
