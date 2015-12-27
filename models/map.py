@@ -20,7 +20,7 @@ from support.support import *
 class Map(Container):
 
     # ~def __init__(self, engineobj=None, selfid=None, maptype='', sizex=0, sizey=0, *layers, **components):
-    def __init__(self, engineobj=None, maptype=VERT_0, sizex=0, sizey=0, *layers, **components):
+    def __init__(self, engineobj=None, maptype=None, sizex=0, sizey=0, *layers, **components):
 
         self.id = 'MAP'
 
@@ -36,7 +36,7 @@ class Map(Container):
         self.layers = {}
         self.layers_order = []
 
-        self.add_layer('Textures')
+        # ~self.add_layer('Textures')
 
         if layers:
             for i in layers:

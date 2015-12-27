@@ -1,4 +1,5 @@
 {
+    "type" : "HORIZ_0",
     "size" : [10, 10],
     "layers": {
         "Surfaces": [

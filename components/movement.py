@@ -104,6 +104,7 @@ class Movement(Component):
         for layer in self.mapobj.layers:
             # ~print("LAYER:", layer)
             # ~self.move_on_layer(objid, dx, dy, layer=layer)
+            print(">>>MOVE ON <AP LAYER:", layer)
             self.mapobj.layers[layer][y0+dy][x0+dx], self.mapobj.layers[layer][y0][x0] = self.mapobj.layers[layer][y0][x0], self.mapobj.layers[layer][y0+dy][x0+dx]
 
 

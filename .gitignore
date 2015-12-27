@@ -5,3 +5,4 @@
 **/__pycache__/*
 geany_run_script.sh
 geany_run_script.bat
+.spyderproject

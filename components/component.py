@@ -62,6 +62,8 @@ class Component(object):
             self.handlers[event_type] = [handler, ]
             
     def update(self, event):
+        
         event_type = type(event)
-        for handler in self.handlers[event_type]:
-            handler(self, event)
+        if event_type in self.handlers:
+            for handler in self.handlers[event_type]:
+                handler(self, event)

@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import os, sys
-
-
+import os
+import sys
 
 import numbers
 
 from components.components import *
 from models.models import *
-
 
 from engine.engine import *
 
@@ -39,17 +37,17 @@ def setup_app():
     _MEIPASS = _MEIPASS2 = resource_path(".")
 
 
-
-def Graphics_UpdateScene_Handler(obj, event):
+def graphics_UpdateSceneEvent_handler(obj, event):
     # ~if type(event) is UpdateSceneEvent:
-    layers_order = event.layers_order
-    sprites = obj.sprites_container.data[obj.id]
+    # ~layers_order = event.layers_order
+    # ~sprites = obj.sprites_container.data[obj.id]
     # ~for l in layers_order:
         # ~renderer.draw_map_layer(layer=l)
     # ~print(">>>>EVENT:", event)
+    pass
 
-def Renderer_UpdateScene_Handler(obj, event):
-    # ~print("Renderer_UpdateScene_Handler")
+def renderer_UpdateSceneEvent_handler(obj, event):
+    # ~print("renderer_UpdateSceneEvent_handler")
     # ~if type(event) is UpdateSceneEvent:
     layers_order = event.layers_order
     # ~sprites = graphics.sprites_container.data[graphics.id]
@@ -59,48 +57,57 @@ def Renderer_UpdateScene_Handler(obj, event):
 
 if __name__=='__main__':
 
-    setup_app() # allows to build .exe
+    setup_app()  # allows to build .exe
 
     print('Seems, it works')
 
     engine = Engine()
-    engine.add_container(Map(engine, maptype=HORIZ_0, sizex=20, sizey=20))
+    # ~engine.add_container(Map(engine, maptype=HORIZ_0, sizex=20, sizey=20))
+    engine.add_container(Map(engine))
 
 
     m = engine.containers['MAP']
-    t = m.type
 
     # ~m.add_layer('UnitsTextures', content=[[0 for j in range(m.X)] for i in range(m.Y)])
 
     # ~load_map_from_file(m, graphics, 'test_map.js')
 
     graphics = Graphics(engine, Container(engine))
-    graphics.bind(UpdateSceneEvent, Graphics_UpdateScene_Handler)
+    graphics.bind(UpdateSceneEvent, graphics_UpdateSceneEvent_handler)
 
     window = sf.RenderWindow(sf.VideoMode(800, 600), 'HEX')
 
     renderer = Renderer(engine, graphics, window)
-    renderer.bind(UpdateSceneEvent, Renderer_UpdateScene_Handler)
+    renderer.bind(UpdateSceneEvent, renderer_UpdateSceneEvent_handler)
 
     iface = IFaceManager(engine, Container(), window)
 
     mwid = MasterWidget(iface)
     btn1 = Button(mwid)
+    # ~for i in range(1000):
+        # ~label1 = Label(mwid, label='aaa', position=(600, 100), width=100, height=100, color=(10, 50, 70))
+    labels = [Label(mwid, label=str(i), position=(i*10, 100), width=10, height=100, color=(10, 50, i*2), borderwidth=0) for i in range(100)]
+    # ~print([i.id for i in labels])
 
     attributes = Attributes(engine)
 
     movement = Movement(engine)
-    
+
     ai = AI(engine)
-    
-    conversation = Conversation(engine, Container(engine))
-    
+
+    # ~conversation = Conversation(engine, Container(engine))
+
     # ~conversation.load_conversations('conversations.js')
     # ~load_textures_from_file(graphics, 'textures.js')
     # ~load_map_from_file(m, graphics, 'map.js')
     # ~create_units_by_map(engine)
 
-    load_level(engine, 'textures.js', 'map.js', 'conversations.js')
+    # ~load_level(engine, 'textures.js', 'map.js', 'conversations.js')
+    load_level(engine, 'textures.js', 'map.js')
+    t = m.type
+    print(">MAP TYPE:", m.type)
+    print(">MAP SIZE:", m.X, m.Y)
+    
 
     # ~engine.add_container(Unit(engine, graphics, attributes, movement))
 
@@ -115,7 +122,7 @@ if __name__=='__main__':
 
     total_zoom = 1
 
-    circle = sf.CircleShape(R(S), 6)
+    circle = sf.CircleShape(R(S), 10)
     # ~circle.radius = R(S)
     circle.outline_color = sf.Color(130, 220, 200, 200)
     circle.fill_color = sf.Color.TRANSPARENT
@@ -155,6 +162,7 @@ if __name__=='__main__':
         engine.push_event(UpdateSceneEvent(layers_order=['Surfaces', 'Buildings', 'UnitsTextures']))
         if cur_uid>0:
             engine.push_event(OutlineUnitEvent(uid=cur_uid))
+            engine.push_event(CalculatePossibleWaysEvent(uid=cur_uid))
             engine.push_event(ShowPossibleWaysEvent(uid=cur_uid))
             nx, ny = nearest(x, y, S, t)
             engine.push_event(ShowWayEvent(x1=nx, y1=ny))
@@ -206,9 +214,13 @@ if __name__=='__main__':
 
                 # ~print('ZOOM:', zoom_coeff(4, event.delta))
                 print('TOTAL_ZOOM:', total_zoom)
-                zoom = zoom_coeff(1.25, -event.delta)
+                zoom = round(zoom_coeff(1.25, -event.delta), 2)
                 total_zoom *= zoom
                 window.view.zoom(zoom)
+
+            # ~elif type(event) is sf.MouseMoveEvent:
+                # ~if cur_uid:
+                    # ~engine.push_event(CalculatePossibleWaysEvent(uid=cur_uid))
 
             elif type(event) is sf.MouseButtonEvent:
                 button = event.button
@@ -224,10 +236,10 @@ if __name__=='__main__':
                     if cur_uid > 0 and not AI in engine.containers[cur_uid].data:
                         # ~x, y = window.map_pixel_to_coords(event.position)
                         # ~map_x, map_y = nearest(x, y, S, t)
-                        
+
                         print("CUR_ID:", cur_uid)
-                        if cur_uid:
-                            conversation.start_conversation('dialog1')
+                        # ~if cur_uid:
+                            # ~conversation.start_conversation('dialog1')
                             # ~ans = ask(window, message=conversation['.start']['message'], answers=conversation['.start']['answers'])
                             # ~while ans in conversation:
                                 # ~ans = ask(window, message=conversation[ans]['message'], answers=conversation[ans]['answers'])
@@ -247,6 +259,7 @@ if __name__=='__main__':
 
                             engine.push_event(UpdateMapLayerEvent(texture=m.layers['Surfaces'][uy][ux], x1=ux, y1=uy, layer='UnitsTextures'))
 
+                            path.insert(0, (ux, uy))
 
                             for i in range(1, len(path)):
                                 prev_x = t['hex_x'](path[i-1][0], path[i-1][1], S)
@@ -255,7 +268,7 @@ if __name__=='__main__':
                                 cur_y = t['hex_y'](path[i][0], path[i][1], S)
 
 
-                                renderer.animate(animation_name, prev_x, prev_y, cur_x, cur_y, step=1)
+                                renderer.animate(animation_name, prev_x, prev_y, cur_x, cur_y, step=1.5)
 
                             movement.move(cur_uid, int(map_x-ux), int(map_y-uy))
 
@@ -301,10 +314,12 @@ if __name__=='__main__':
                             print("OBJID:", objid)
                             max_action_points = attributes.get_attribute(objid, 'max_action_points')
                             attributes.set_attribute(objid, 'action_points', max_action_points)
-                        
+
                         print(m.layers['Units'])
-                        
+
                         engine.push_event(AIUpdateEvent())
+
+        # ~show_message(window, "asdasds")
 
         while engine.events_queue:
         # ~for iii in range(len(engine.events_queue)):
@@ -323,6 +338,9 @@ if __name__=='__main__':
                 graphics.update(event)
                 # ~print(">>>EVENT:", event)
                 renderer.update(event)
+                # ~with Label(mwid, label='aaa', position=(600, 100), width=100, height=100, color=(10, 50, 70)) as label1:
+                    # ~iface.update(event)
+                iface.update(event)
                 
             elif type(event) is ClearCanvasEvent:
 
@@ -378,21 +396,37 @@ if __name__=='__main__':
 
             elif type(event) is ShowPossibleWaysEvent:
 
+                # ~uid = event.uid
+
+                # ~action_points = attributes.get_attribute(uid, 'action_points')
+
+                # ~if not action_points is None and action_points>=0:
+
+                    # ~ux, uy = movement.get_coords(uid)
+
+                    # ~possible_cells, graph = possible_ways(m, ux, uy, action_points)
+                    # ~possible_cells.pop(0)
+
+                    # ~for j in possible_cells:
+                        # ~for i in j:
+                            # ~circle1.position = (t['hex_x'](i[0], i[1], S), t['hex_y'](i[0], i[1], S))
+                            # ~window.draw(circle1)
+
+                for j in possible_cells:
+                    for i in j:
+                        circle1.position = (t['hex_x'](i[0], i[1], S), t['hex_y'](i[0], i[1], S))
+                        window.draw(circle1)
+
+            elif type(event) is CalculatePossibleWaysEvent:
+
                 uid = event.uid
 
                 action_points = attributes.get_attribute(uid, 'action_points')
 
                 if not action_points is None and action_points>=0:
-
                     ux, uy = movement.get_coords(uid)
-
                     possible_cells, graph = possible_ways(m, ux, uy, action_points)
                     possible_cells.pop(0)
-
-                    for j in possible_cells:
-                        for i in j:
-                            circle1.position = (t['hex_x'](i[0], i[1], S), t['hex_y'](i[0], i[1], S))
-                            window.draw(circle1)
 
             elif type(event) is ShowWayEvent:
 
@@ -448,37 +482,37 @@ if __name__=='__main__':
                 ai.update()
                 graphics.prerender_map_layer(layer='UnitsTextures')
 
-            elif type(event) is AskEvent:
+            # ~elif type(event) is AskEvent:
 
                 # ~message = event.message
                 # ~answers = event.answers
-                conv = event.conversation
+                # ~conv = event.conversation
                 # ~lastanswer = conv['.answers'][-1]
-                lastanswer = conv['.lastanswer']
-                if lastanswer in conv:
-                    message = conv[lastanswer]['message']
-                    answers = conv[lastanswer]['answers']
+                # ~lastanswer = conv['.lastanswer']
+                # ~if lastanswer in conv:
+                    # ~message = conv[lastanswer]['message']
+                    # ~answers = conv[lastanswer]['answers']
 
-                    if 'size' in event.__dict__:
-                        size = event.size
-                    else:
-                        size = 16
+                    # ~if 'size' in event.__dict__:
+                        # ~size = event.size
+                    # ~else:
+                        # ~size = 16
 
-                    answer = ask(window, engine, message, size, answers=answers)
-                    
+                    # ~answer = ask(window, engine, message, size, answers=answers)
+
                     # ~print("ANSWER:", answer)
 
-                    if not answer is None:
-                        conv['.lastanswer'] = answer
-                    else:
-                        engine.push_event(AskEvent(conversation=conv))
-                        engine.push_event(DisplayEvent())
-                        print("ASK 2")
+                    # ~if not answer is None:
+                        # ~conv['.lastanswer'] = answer
+                    # ~else:
+                        # ~engine.push_event(AskEvent(conversation=conv))
+                        # ~engine.push_event(DisplayEvent())
+                        # ~print("ASK 2")
                     # ~engine.push_event(ClearCanvasEvent())
-                    if answer in conv:
-                        engine.push_event(AskEvent(conversation=conv))
-                        engine.push_event(DisplayEvent())
-                        print("ASK 1")
+                    # ~if answer in conv:
+                        # ~engine.push_event(AskEvent(conversation=conv))
+                        # ~engine.push_event(DisplayEvent())
+                        # ~print("ASK 1")
 
         current_time = clock.elapsed_time.milliseconds
 

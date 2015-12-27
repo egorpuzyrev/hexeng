@@ -108,6 +108,12 @@ class ShowPossibleWaysEvent(Event):
         super().__init__(**kwargs)
 
 
+class CalculatePossibleWaysEvent(Event):
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+
 class ShowWayEvent(Event):
 
     def __init__(self, **kwargs):

@@ -16,6 +16,7 @@ from events.events import *
 
 from .support import *
 
+import sfml as sf
 
 def load_map_from_file(m, g, path):
 
@@ -27,6 +28,11 @@ def load_map_from_file(m, g, path):
 
     j = json.loads(s)
 
+    print(">>>MAP TYPE:", j['type'])
+    # ~print(locals())
+    # ~m.type = globals().get(j['type'])
+    m.type = MAP_TYPES.get(j['type'])
+    print(">>>MAP SIZE:", j['size'])
     m.X, m.Y = j['size']
     layers = j['layers']
     layers_order = j['layers_order']
@@ -89,18 +95,27 @@ def create_units_by_map(e):
                 print('NEW UNIT:', u.id, i[0], j[0])
 
 
-def load_level(e, tex_path, map_path, conv_path):
-    
-    m = e.containers['MAP']
-    
-    g = e.components[Graphics]
-    
-    conv = e.components[Conversation]
-    
-    load_textures_from_file(g, tex_path)
-    load_map_from_file(m, g, map_path)
-    conv.load_conversations(conv_path)
+def load_level(engine, textures_js_path=None, map_js_path=None, conversations_js_path=None):
 
-    create_units_by_map(e)
-    
-    e.push_event(UpdateSceneEvent(layers_order=['Surfaces', 'Buildings', 'UnitsTextures']))
+    if textures_js_path:
+        g = engine.components[Graphics]
+        load_textures_from_file(g, textures_js_path)
+
+    if map_js_path:
+        m = engine.containers['MAP']
+        load_map_from_file(m, g, map_js_path)
+        print(">>MAP TYPE:", m.type)
+        create_units_by_map(engine)
+        engine.push_event(UpdateSceneEvent(layers_order=['Surfaces', 'Buildings', 'UnitsTextures']))
+
+    if conversations_js_path:
+        conv = engine.components[Conversation]
+        conv.load_conversations(conversations_js_path)
+
+
+def load_font(engine, font_name, path_to_font):
+
+    interface = engine.components[IFaceManager]
+
+    data = interface.data[interface.id]
+    data['fonts'][font_name] = sf.Font.from_file(path_to_font)
