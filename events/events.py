@@ -124,3 +124,23 @@ class AIUpdateEvent(Event):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+
+
+class ResizeEvent(Event):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+
+class ZoomEvent(Event):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+
+class ResizeEvent(Event):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+
+class MouseClickEvent(Event):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)

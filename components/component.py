@@ -26,6 +26,7 @@ class Component(object):
             self.engine.add_component(self)
         else:
             self.id  = DEFAULTCONTAINERSIDMANAGER(self)
+            # ~self.id  = DEFAULTCOMPONENTSIDMANAGER(self)
 
 
         self.containers_list = []
@@ -37,6 +38,8 @@ class Component(object):
         # ~self.components = engineobj.components
 
         self.engine.add_component(self)
+
+        print(">>INITIALIZED COMPONENT {} ID {}".format(type(self), self.id))
 
     def add_container(self, obj):
 
@@ -60,10 +63,13 @@ class Component(object):
             self.handlers[event_type].append(handler)
         elif mode=='-':
             self.handlers[event_type] = [handler, ]
+        # ~print(">>>BINDED:", self.id, type(self), event_type, self.handlers[event_type])
             
     def update(self, event):
         
         event_type = type(event)
+        
         if event_type in self.handlers:
+            # ~print(self.id, event_type)
             for handler in self.handlers[event_type]:
                 handler(self, event)

@@ -247,6 +247,14 @@ class Renderer(Component):
 
         self.window.draw(sprite)
 
+        # ~view = sf.View()
+        # ~view.viewport = (0.75, 0, 0.25, 0.3)
+        # ~oldview = self.window.view
+        # ~self.window.view = view
+        # ~self.window.draw(sprite)
+        # ~self.window.view = oldview
+
+
 
 
     def render_map(self):
@@ -260,7 +268,6 @@ class Renderer(Component):
         sprites = sprites_container.data[self.graphics_component_id]['static']
 
         surfaces_layer = [[sprites[i] for i in j] for j in mapobj.layers['Surfaces']]
-
 
         for i in enumerate(surfaces_layer):
             for j in enumerate(surfaces_layer[i[0]]):

@@ -157,6 +157,7 @@ class Graphics(Component):
 
         sprites = sprites_container.data[self.id]
 
+        # ~pre.view.zoom(2)
 
         for i in enumerate(mapobj.layers[layer]):
             for j in enumerate(mapobj.layers[layer][i[0]]):
@@ -174,6 +175,10 @@ class Graphics(Component):
 
                     sprite.position = (t['hex_x'](j[0], i[0], S), t['hex_y'](j[0], i[0], S))
 
+                    # ~sprite.scale((0.2, 0.2))
+
+                    # ~pre.view.zoom(2)
+
                     pre.draw(sprite)
 
 
@@ -189,8 +194,11 @@ class Graphics(Component):
 
                     sprite.position = (t['hex_x'](j[0], i[0], S), t['hex_y'](j[0], i[0], S))
 
+                    # ~sprite.scale((0.2, 0.2))
+
                     pre.draw(sprite)
 
+        # ~pre.view.zoom(20)
         pre.display()
 
     def update_map_layer(self, x1=0, y1=0, texture='', layer='Surfaces'):
@@ -223,8 +231,11 @@ class Graphics(Component):
 
         sprite.position = (t['hex_x'](x1, y1, S), t['hex_y'](x1, y1, S))
 
+        # ~sprite.scale((1.25, 1.25))
+
         pre.draw(sprite)
 
+        # ~pre.view.zoom(20)
         pre.display()
 
 

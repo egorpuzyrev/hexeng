@@ -38,22 +38,25 @@ def setup_app():
 
 
 def graphics_UpdateSceneEvent_handler(obj, event):
-    # ~if type(event) is UpdateSceneEvent:
-    # ~layers_order = event.layers_order
-    # ~sprites = obj.sprites_container.data[obj.id]
-    # ~for l in layers_order:
-        # ~renderer.draw_map_layer(layer=l)
-    # ~print(">>>>EVENT:", event)
     pass
 
 def renderer_UpdateSceneEvent_handler(obj, event):
-    # ~print("renderer_UpdateSceneEvent_handler")
-    # ~if type(event) is UpdateSceneEvent:
     layers_order = event.layers_order
-    # ~sprites = graphics.sprites_container.data[graphics.id]
     for l in layers_order:
         obj.draw_map_layer(layer=l)
 
+def iface_MouseClickEvent_handler(obj, event):
+    print(">>IFACE MOUSECLICKEVENT HANDLER:", event.__dict__)
+    print(obj.find_intersection(event.position))
+
+# ~def iface_MouseEvent_handler1(obj, event):
+    # ~print(">>IFACE MOUSECLICKEVENT HANDLER:", event.__dict__)
+
+def button1_MouseClickEvent_handler(obj, event):
+
+    if obj.id in obj.manager.intersection:
+        print(">>BUTTON1 CLICKED")
+    # ~exit()
 
 if __name__=='__main__':
 
@@ -68,26 +71,31 @@ if __name__=='__main__':
 
     m = engine.containers['MAP']
 
-    # ~m.add_layer('UnitsTextures', content=[[0 for j in range(m.X)] for i in range(m.Y)])
-
-    # ~load_map_from_file(m, graphics, 'test_map.js')
-
     graphics = Graphics(engine, Container(engine))
     graphics.bind(UpdateSceneEvent, graphics_UpdateSceneEvent_handler)
 
     window = sf.RenderWindow(sf.VideoMode(800, 600), 'HEX')
+    window.position = (0, 0)
 
     renderer = Renderer(engine, graphics, window)
     renderer.bind(UpdateSceneEvent, renderer_UpdateSceneEvent_handler)
 
     iface = IFaceManager(engine, Container(), window)
+    iface.bind(MouseClickEvent, iface_MouseClickEvent_handler)
 
     mwid = MasterWidget(iface)
     btn1 = Button(mwid)
-    # ~for i in range(1000):
-        # ~label1 = Label(mwid, label='aaa', position=(600, 100), width=100, height=100, color=(10, 50, 70))
-    labels = [Label(mwid, label=str(i), position=(i*10, 100), width=10, height=100, color=(10, 50, i*2), borderwidth=0) for i in range(100)]
-    # ~print([i.id for i in labels])
+
+    start = sf.Clock()
+    label1=Label(mwid, label=str("TEST LABEL"), position=(0, 0), width=100, height=30, color=(10, 50, 90), borderwidth=5, bordercolor=(90, 50, 10))
+    button1=Button(mwid, label=str("EXIT"), position=(110, 0), width=100, height=30, color=(10, 50, 90), borderwidth=5, bordercolor=(90, 50, 10))
+    # ~labels = [Label(mwid, label=str(i), position=(i*10, 0), width=10, height=100, color=(10, 50, (i*2)%255), borderwidth=0) for i in range(30)]
+    # ~labels = [Label(mwid, label=str(i), position=(i*5, 100), width=5, height=100, color=(10, 50, (i*2)%255), borderwidth=0) for i in range(200)]
+    finish = start.elapsed_time.milliseconds
+    print(">TOTAL ELAPSED TIME:", finish)
+    print(">MS PER LABEL:", finish/20)
+
+    button1.bind(MouseClickEvent, button1_MouseClickEvent_handler)
 
     attributes = Attributes(engine)
 
@@ -95,22 +103,11 @@ if __name__=='__main__':
 
     ai = AI(engine)
 
-    # ~conversation = Conversation(engine, Container(engine))
-
-    # ~conversation.load_conversations('conversations.js')
-    # ~load_textures_from_file(graphics, 'textures.js')
-    # ~load_map_from_file(m, graphics, 'map.js')
-    # ~create_units_by_map(engine)
-
     # ~load_level(engine, 'textures.js', 'map.js', 'conversations.js')
     load_level(engine, 'textures.js', 'map.js')
     t = m.type
     print(">MAP TYPE:", m.type)
     print(">MAP SIZE:", m.X, m.Y)
-    
-
-    # ~engine.add_container(Unit(engine, graphics, attributes, movement))
-
 
     clock = sf.Clock()
     last_time = 0
@@ -157,7 +154,6 @@ if __name__=='__main__':
 
         x, y = window.map_pixel_to_coords(sf.Mouse.get_position(window))
 
-        # ~graphics.prerender_map_layer(layer='UnitsTextures')
         engine.push_event(ClearCanvasEvent())
         engine.push_event(UpdateSceneEvent(layers_order=['Surfaces', 'Buildings', 'UnitsTextures']))
         if cur_uid>0:
@@ -170,10 +166,6 @@ if __name__=='__main__':
             graph = []
             possible_cells = []
 
-
-        # ~if cur_conv:
-            # ~engine.push_event(AskEvent(conversation=cur_conv))
-
         engine.push_event(DisplayEvent())
 
         x, y = sf.Mouse.get_position(window)
@@ -185,12 +177,12 @@ if __name__=='__main__':
 
         if window_size_y>y>window_size_y-SCROLLZONE:
             dcy = 10
-        elif 0<y<SCROLLZONE:
-            dcy = -10
+        # ~elif 0<y<SCROLLZONE:
+            # ~dcy = -10
         if window_size_x>x>window_size_x-SCROLLZONE:
             dcx = 10
-        elif 0<x<SCROLLZONE:
-            dcx = -10
+        # ~elif 0<x<SCROLLZONE:
+            # ~dcx = -10
         if dcx or dcy:
             window.view.center = (cx+dcx, cy+dcy)
 
@@ -204,8 +196,10 @@ if __name__=='__main__':
                 exit()
 
             elif type(event) is sf.ResizeEvent:
-                window.view = sf.View((0, 0, event.size[0], event.size[1]))
-                window.view.zoom(total_zoom)
+                # ~window.view = sf.View((0, 0, event.size[0], event.size[1]))
+                # ~window.view.zoom(total_zoom)
+                engine.push_event(ResizeEvent(size=event.size))
+                # ~engine.push_event(ZoomEvent(total_zoom=total_zoom))
                 engine.push_event(ClearCanvasEvent())
                 engine.push_event(UpdateSceneEvent(layers_order=['Surfaces', 'UnitsTextures']))
                 engine.push_event(DisplayEvent())
@@ -216,35 +210,43 @@ if __name__=='__main__':
                 print('TOTAL_ZOOM:', total_zoom)
                 zoom = round(zoom_coeff(1.25, -event.delta), 2)
                 total_zoom *= zoom
-                window.view.zoom(zoom)
-
-            # ~elif type(event) is sf.MouseMoveEvent:
-                # ~if cur_uid:
-                    # ~engine.push_event(CalculatePossibleWaysEvent(uid=cur_uid))
+                # ~window.view.zoom(zoom)
+                engine.push_event(ZoomEvent(zoom=zoom, total_zoom=total_zoom))
 
             elif type(event) is sf.MouseButtonEvent:
+
+                engine.push_event(MouseClickEvent(position=event.position, button=event.button))
+                
                 button = event.button
 
                 x, y = window.map_pixel_to_coords(event.position)
+
+                print(">MOUSE COORDS:", x, y)
+
+                # ~view = sf.View()
+                # ~view.viewport = (0.75, 0, 0.25, 0.3)
+
+                # ~x, y = view.map_pixel_to_coords(event.position)
+
+                # ~print(">MOUSE COORDS VIEW:", x, y)
+                
+                # ~window.mapPixelToCoords(pixelPos)
+                
                 map_x, map_y = nearest(x, y, S, t)
                 hex_x = t['hex_x'](map_x, map_y, S)
                 hex_y = t['hex_y'](map_x, map_y, S)
 
+                engine.push_event(MouseClickEvent(position=event.position, button=event.button))
+
                 if button == sf.Mouse.LEFT and event.pressed:
-                    cur_uid = m.layers['Units'][map_y][map_x]
+                    if 0<=map_y<m.Y  and 0<=map_x<m.X:
+                        cur_uid = m.layers['Units'][map_y][map_x]
 
-                    if cur_uid > 0 and not AI in engine.containers[cur_uid].data:
-                        # ~x, y = window.map_pixel_to_coords(event.position)
-                        # ~map_x, map_y = nearest(x, y, S, t)
+                        if cur_uid > 0 and not AI in engine.containers[cur_uid].data:
 
-                        print("CUR_ID:", cur_uid)
-                        # ~if cur_uid:
-                            # ~conversation.start_conversation('dialog1')
-                            # ~ans = ask(window, message=conversation['.start']['message'], answers=conversation['.start']['answers'])
-                            # ~while ans in conversation:
-                                # ~ans = ask(window, message=conversation[ans]['message'], answers=conversation[ans]['answers'])
-                    else:
-                        cur_uid = 0
+                            print("CUR_ID:", cur_uid)
+                        else:
+                            cur_uid = 0
                 if button == sf.Mouse.RIGHT and event.pressed:
 
                     if cur_uid:
@@ -260,6 +262,8 @@ if __name__=='__main__':
                             engine.push_event(UpdateMapLayerEvent(texture=m.layers['Surfaces'][uy][ux], x1=ux, y1=uy, layer='UnitsTextures'))
 
                             path.insert(0, (ux, uy))
+                            # ~path.insert(0, (ux, uy))
+                            # ~path.insert(0, (ux, uy))
 
                             for i in range(1, len(path)):
                                 prev_x = t['hex_x'](path[i-1][0], path[i-1][1], S)
@@ -273,21 +277,10 @@ if __name__=='__main__':
                             movement.move(cur_uid, int(map_x-ux), int(map_y-uy))
 
                             ap = attributes.get_attribute(uid, 'action_points')
+                            # ~print(">AP:", ap)
                             attributes.set_attribute(uid, 'action_points', ap-len(path))
 
                             engine.push_event(PrerenderMapLayerEvent(layer='UnitsTextures'))
-
-                            # ~graphics.prerender_map_layer(layer='UnitsTextures')
-
-
-            # ~elif type(event) is sf.MouseMoveEvent:
-                # ~x, y = sf.Mouse.get_position(window)
-                # ~window_size_x, window_size_y = window.size
-                # ~cx, cy = window.view.center
-                # ~dcx = 0
-                # ~dcy = 0
-                # ~nx, ny = nearest(x, y, S, t)
-                # ~engine.push_event(ShowWayEvent(x1=nx, y1=ny))
 
             elif type(event) is sf.KeyEvent:
                 if event.pressed:
@@ -319,10 +312,7 @@ if __name__=='__main__':
 
                         engine.push_event(AIUpdateEvent())
 
-        # ~show_message(window, "asdasds")
-
         while engine.events_queue:
-        # ~for iii in range(len(engine.events_queue)):
 
             event = engine.poll_event()
 
@@ -330,16 +320,10 @@ if __name__=='__main__':
 
             if type(event) is UpdateSceneEvent:
 
-                # ~layers_order = event.layers_order
-                # ~sprites = graphics.sprites_container.data[graphics.id]
-                # ~for l in layers_order:
-                    # ~renderer.draw_map_layer(layer=l)
-                # ~print(">>>EVENT:", event)
                 graphics.update(event)
-                # ~print(">>>EVENT:", event)
+
                 renderer.update(event)
-                # ~with Label(mwid, label='aaa', position=(600, 100), width=100, height=100, color=(10, 50, 70)) as label1:
-                    # ~iface.update(event)
+
                 iface.update(event)
                 
             elif type(event) is ClearCanvasEvent:
@@ -383,34 +367,13 @@ if __name__=='__main__':
                 ux = unit.data[movement.id]['x']
                 uy = unit.data[movement.id]['y']
 
-                # ~print('UX, UY:', ux, uy)
-
                 hx = t['hex_x'](ux, uy, S)
                 hy = t['hex_y'](ux, uy, S)
-
-                # ~print('hx, hy:', hx, hy)
-
 
                 circle.position = (hx, hy)
                 window.draw(circle)
 
             elif type(event) is ShowPossibleWaysEvent:
-
-                # ~uid = event.uid
-
-                # ~action_points = attributes.get_attribute(uid, 'action_points')
-
-                # ~if not action_points is None and action_points>=0:
-
-                    # ~ux, uy = movement.get_coords(uid)
-
-                    # ~possible_cells, graph = possible_ways(m, ux, uy, action_points)
-                    # ~possible_cells.pop(0)
-
-                    # ~for j in possible_cells:
-                        # ~for i in j:
-                            # ~circle1.position = (t['hex_x'](i[0], i[1], S), t['hex_y'](i[0], i[1], S))
-                            # ~window.draw(circle1)
 
                 for j in possible_cells:
                     for i in j:
@@ -424,6 +387,7 @@ if __name__=='__main__':
                 action_points = attributes.get_attribute(uid, 'action_points')
 
                 if not action_points is None and action_points>=0:
+                    # ~print(">ACTION_POINTS:", action_points)
                     ux, uy = movement.get_coords(uid)
                     possible_cells, graph = possible_ways(m, ux, uy, action_points)
                     possible_cells.pop(0)
@@ -440,16 +404,12 @@ if __name__=='__main__':
 
                 while any([(cur_x, cur_y) in i for i in possible_cells]):
                     for i in graph:
-                        # ~print("GRAPH[I]:", i, graph[i])
                         if (cur_x, cur_y) in graph[i]:
                             path.append((cur_x, cur_y))
                             cur_x, cur_y = i
                             continue
-                            # ~break
 
                 path.reverse()
-
-                # ~print("PATH:", path)
 
                 for i in path:
                     circle2.position = (t['hex_x'](i[0], i[1], S), t['hex_y'](i[0], i[1], S))
@@ -482,37 +442,16 @@ if __name__=='__main__':
                 ai.update()
                 graphics.prerender_map_layer(layer='UnitsTextures')
 
-            # ~elif type(event) is AskEvent:
+            elif type(event) is ZoomEvent:
+                # ~window.view = sf.View((0, 0, event.size[0], event.size[1]))
+                window.view.zoom(event.zoom)
 
-                # ~message = event.message
-                # ~answers = event.answers
-                # ~conv = event.conversation
-                # ~lastanswer = conv['.answers'][-1]
-                # ~lastanswer = conv['.lastanswer']
-                # ~if lastanswer in conv:
-                    # ~message = conv[lastanswer]['message']
-                    # ~answers = conv[lastanswer]['answers']
+            elif type(event) is ResizeEvent:
+                window.view = sf.View((0, 0, event.size[0], event.size[1]))
+                # ~window.view.zoom(total_zoom)
 
-                    # ~if 'size' in event.__dict__:
-                        # ~size = event.size
-                    # ~else:
-                        # ~size = 16
-
-                    # ~answer = ask(window, engine, message, size, answers=answers)
-
-                    # ~print("ANSWER:", answer)
-
-                    # ~if not answer is None:
-                        # ~conv['.lastanswer'] = answer
-                    # ~else:
-                        # ~engine.push_event(AskEvent(conversation=conv))
-                        # ~engine.push_event(DisplayEvent())
-                        # ~print("ASK 2")
-                    # ~engine.push_event(ClearCanvasEvent())
-                    # ~if answer in conv:
-                        # ~engine.push_event(AskEvent(conversation=conv))
-                        # ~engine.push_event(DisplayEvent())
-                        # ~print("ASK 1")
+            elif type(event) is MouseClickEvent:
+                iface.update(event)
 
         current_time = clock.elapsed_time.milliseconds
 

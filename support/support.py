@@ -149,7 +149,7 @@ def pathfind(m, x1, y1, x2, y2, layer='Walk'):
     returns path from x2, y2 to x1, y1
     """
 
-    print(">>>STARTED PATHFIND")
+    # ~print(">>>STARTED PATHFIND")
 
     if x1<0 or x2<0 or y1<0 or y2<0 or x1>m.X or x2>m.X or y1>m.Y or y2>m.Y:
         return [(x1,y1), ]
@@ -173,9 +173,9 @@ def pathfind(m, x1, y1, x2, y2, layer='Walk'):
 
     # ~while queue and not ((x2, y2) in checked):
     while queue and not ((x2, y2) in checked):
-        print("while queue and not ((x2, y2) in checked):")
+        # ~print("while queue and not ((x2, y2) in checked):")
         while queue:
-            print("while queue:")
+            # ~print("while queue:")
 
             cur_x, cur_y = queue.pop(0)
 
@@ -193,39 +193,39 @@ def pathfind(m, x1, y1, x2, y2, layer='Walk'):
             dxy = [(dx[i], dy[i]) for i in range(len(dx))]
 
             for i in dxy:
-                print("for i in dxy:")
+                # ~print("for i in dxy:")
 
                 icur_x = int(cur_x+i[0])
                 icur_y = int(cur_y+i[1])
 
                 if not(cur_x+i[0]<0 or cur_x+i[0]>=m.X or cur_y+i[1]<0 or cur_y+i[1]>=m.Y):
-                    print("if not(cur_x+i[0]<0 or cur_x+i[0]>=m.X or cur_y+i[1]<0 or cur_y+i[1]>=m.Y):")
+                    # ~print("if not(cur_x+i[0]<0 or cur_x+i[0]>=m.X or cur_y+i[1]<0 or cur_y+i[1]>=m.Y):")
                     if not m.layers['Walk'][cur_y+i[1]][cur_x+i[0]] == -1:
                     # ~if not m.layers['Walk'][cur_y+i[1]][cur_x+i[0]] <= -1:
                     # ~if m.layers['Walk'][cur_y+i[1]][cur_x+i[0]] >= 0:
-                        print("if m.layers['Walk'][cur_y+i[1]][cur_x+i[0]] >= 0:")
-                        # ~print(i)
-                        # ~print(m.layers['Walk'])
+                        # ~print("if m.layers['Walk'][cur_y+i[1]][cur_x+i[0]] >= 0:")
+                        # ~# ~print(i)
+                        # ~# ~print(m.layers['Walk'])
                         if not((cur_x+i[0], cur_y+i[1]) in checked or (cur_x+i[0], cur_y+i[1]) in queue):
-                            print("if not((cur_x+i[0], cur_y+i[1]) in checked or (cur_x+i[0], cur_y+i[1]) in queue):")
+                            # ~print("if not((cur_x+i[0], cur_y+i[1]) in checked or (cur_x+i[0], cur_y+i[1]) in queue):")
                             m1[icur_y][icur_x] += cur_deep
                             queue.append((icur_x, icur_y))
-                        print(i)
+                        # ~print(i)
                     else:
-                        print("else if m.layers['Walk'][cur_y+i[1]][cur_x+i[0]] >= 0:")
+                        # ~print("else if m.layers['Walk'][cur_y+i[1]][cur_x+i[0]] >= 0:")
                         m1[icur_y][icur_x] = -1
                         checked.add((icur_x, icur_y))
 
             checked.add((cur_x, cur_y))
-            print("checked.add((cur_x, cur_y))")
+            # ~print("checked.add((cur_x, cur_y))")
 
 
         if queue and queue[0]==(-1, -1):
-            print("if queue and queue[0]==(-1, -1):")
+            # ~print("if queue and queue[0]==(-1, -1):")
             queue.pop(0)
 
     if not ((x2, y2) in checked):
-        print("if not ((x2, y2) in checked):")
+        # ~print("if not ((x2, y2) in checked):")
 
         # ~return [(0, 0),]
         return [(x1, y1),]
@@ -239,7 +239,7 @@ def pathfind(m, x1, y1, x2, y2, layer='Walk'):
     cur_nm = nm
 
     while not((x1, y1) in path):
-        print("while not((x1, y1) in path):")
+        # ~print("while not((x1, y1) in path):")
 
         cur_x, cur_y = path[-1]
 
@@ -253,18 +253,18 @@ def pathfind(m, x1, y1, x2, y2, layer='Walk'):
 
         count = 0
         for i in dxy:
-            print("for i in dxy:")
+            # ~print("for i in dxy:")
 
             icur_x = int(cur_x+i[0])
             icur_y = int(cur_y+i[1])
 
             if not(cur_x+i[0]<0 or cur_x+i[0]>=m.X or cur_y+i[1]<0 or cur_y+i[1]>=m.Y):
-                print("if not(cur_x+i[0]<0 or cur_x+i[0]>=m.X or cur_y+i[1]<0 or cur_y+i[1]>=m.Y):")
+                # ~print("if not(cur_x+i[0]<0 or cur_x+i[0]>=m.X or cur_y+i[1]<0 or cur_y+i[1]>=m.Y):")
                 if m1[cur_y+i[1]][cur_x+i[0]] < m1[cur_y][cur_x] and not((cur_x+i[0], cur_y+i[1]) in path):
-                    print("if m1[cur_y+i[1]][cur_x+i[0]] < m1[cur_y][cur_x] and not((cur_x+i[0], cur_y+i[1]) in path):")
+                    # ~print("if m1[cur_y+i[1]][cur_x+i[0]] < m1[cur_y][cur_x] and not((cur_x+i[0], cur_y+i[1]) in path):")
                     # ~if not(m1[cur_y+i[1]][cur_x+i[0]]==-1):
                     if (m1[cur_y+i[1]][cur_x+i[0]]>=0):
-                        print("if not(m1[cur_y+i[1]][cur_x+i[0]]==-1):")
+                        # ~print("if not(m1[cur_y+i[1]][cur_x+i[0]]==-1):")
                         path.append((icur_x, icur_y))
                         break
             
@@ -274,15 +274,15 @@ def pathfind(m, x1, y1, x2, y2, layer='Walk'):
         if count==len(dxy):
             break
 
-    print(">>>FINISHED PATHFIND")
-    print(">>>PATH:", path)
+    # ~print(">>>FINISHED PATHFIND")
+    # ~print(">>>PATH:", path)
     return path
 
 
 
 def possible_ways(m, x1, y1, deep=1, layer='Walk'):
 
-    print(">>>STARTED POSSIBLE WAYS")
+    # ~print(">>>STARTED POSSIBLE WAYS")
 
     t = m.type
 
@@ -332,7 +332,7 @@ def possible_ways(m, x1, y1, deep=1, layer='Walk'):
                     # ~if not m.layers['Walk'][cur_y+i[1]][cur_x+i[0]] == -1:
                     # ~if not m.layers['Walk'][cur_y+i[1]][cur_x+i[0]] <= -1:
                     if m.layers['Walk'][cur_y+i[1]][cur_x+i[0]] >= 0:
-                        # ~print(m.layers['Walk'])
+                        # ~# ~print(m.layers['Walk'])
                         if not((cur_x+i[0], cur_y+i[1]) in checked or (cur_x+i[0], cur_y+i[1]) in queue):
 
                             neighbours[(cur_x, cur_y)].append((icur_x, icur_y))
@@ -346,11 +346,24 @@ def possible_ways(m, x1, y1, deep=1, layer='Walk'):
 
             checked.add((cur_x, cur_y))
 
-    print(">>>FINISHED POSSIBLE WAYS")
+    # ~print(">>>FINISHED POSSIBLE WAYS")
 
     return path, neighbours
 
 
+def find_overlap(position, rects):
+
+    overlap = []
+
+    x0, y0 = position
+
+    for i in rects:
+        x1, y1. x2, y2 = rects[i]
+
+        if x1<=x0<=x2 and y1<=y0<=y2:
+            overlap.append(i)
+
+    return overlap
 
 
 def show_message(w, message, size=16, dx=0, dy=0):
@@ -431,7 +444,7 @@ def ask(w, e, message, size=16, dx=0, dy=0, answers=[]):
     bg1.position = (cx, cy+55)
     
    
-    # ~print('bg1.global_bounds:', bg1.global_bounds)
+    # ~# ~print('bg1.global_bounds:', bg1.global_bounds)
 
     texts = []
 
@@ -469,7 +482,7 @@ def ask(w, e, message, size=16, dx=0, dy=0, answers=[]):
                         answer = answers[i[0]]
                         
                         done = 1
-                        print(answer)
+                        # ~print(answer)
                         
                         e.push_event(ClearCanvasEvent())
                         e.push_event(UpdateSceneEvent(layers_order=['Surfaces', 'Buildings', 'UnitsTextures']))

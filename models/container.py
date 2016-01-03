@@ -35,7 +35,7 @@ class Container(object):
         for i in components:
             self.add_component(i)
 
-
+        print(">>INITIALIZED CONTAINER {} ID {}".format(type(self), self.id))
 
     def add_component(self, component, order=-1, name=''):
 
